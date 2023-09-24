@@ -1,5 +1,3 @@
-#[allow(dead_code)]
-
 pub mod wordle {
     use colored::*;
     use std::collections::HashMap;
@@ -147,77 +145,6 @@ pub mod wordle {
        //println!("accuracy: {accuracy}, correct_new: {correct_new}, greens: {:?}, yellow: {:?}", greens, yellows);
 
         accuracy
-    }
-
-    fn singles(s: &str) -> String {
-        let mut unique_chars = String::new();
-
-        for c in s.chars() {
-            if !unique_chars.contains(c) {
-                unique_chars.push(c);
-            }
-        }
-
-        unique_chars
-    }
-
-    fn similarity(s1: &str, s2: &str) -> f64 {
-        let mut shared_chars = 0;
-        let mut different_chars = 0;
-        let mut total_distance = 0;
-
-        let mut different = String::new();
-
-        for c1 in s1.chars() {
-            if let Some(index) = s2.find(c1) {
-                shared_chars += 1;
-                let distance = (index as i32 - s1.find(c1).unwrap() as i32).abs();
-                total_distance += distance;
-            } else {
-                different.push(c1);
-            }
-        }
-
-        for c2 in s2.chars() {
-            if !s1.contains(c2) {
-                different.push(c2);
-            }
-        }
-
-        different = singles(&different);
-
-        different_chars += different.len();
-
-        let avg_distance = if shared_chars == 0 || shared_chars == different_chars {
-            0.0
-        } else {
-            total_distance as f64 / (shared_chars as i32 - different_chars as i32) as f64
-        };
-
-        let similarity = if total_distance != 0 {
-            1.0 - avg_distance / (std::cmp::max(s1.len(), s2.len()) as f64)
-        } else {
-            1.0 - different_chars as f64 / (std::cmp::max(s1.len(), s2.len()) as f64)
-        };
-
-        similarity
-    }
-
-    fn _avg_similarity(words: &HashMap<String, i32>) -> f64 {
-        let mut total_similarity = 0.0;
-        let mut num_comparisons = 0;
-
-        for (word1, _) in words {
-            for (word2, _) in words {
-                if word1 != word2 {
-                    let sim = similarity(word1, word2);
-                    total_similarity += sim;
-                    num_comparisons += 1;
-                }
-            }
-        }
-
-        total_similarity / num_comparisons as f64
     }
 
     pub fn filter(
